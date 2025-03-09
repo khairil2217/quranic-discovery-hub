@@ -12,6 +12,7 @@ const Index: React.FC = () => {
   const { surahs, loading, error, fetchSurahs } = useQuran();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredSurahs, setFilteredSurahs] = useState<Surah[]>([]);
+  const [illustrationLoaded, setIllustrationLoaded] = useState(false);
 
   // Fetch surahs on component mount
   useEffect(() => {
@@ -45,6 +46,11 @@ const Index: React.FC = () => {
     setSearchQuery(query);
   };
 
+  // Handle illustration load
+  const handleIllustrationLoad = () => {
+    setIllustrationLoaded(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -52,13 +58,32 @@ const Index: React.FC = () => {
       <main className="flex-grow">
         <section className="py-10 md:py-16">
           <div className="container-custom">
-            <div className="text-center mb-12 max-w-3xl mx-auto">
+            <div className="text-center mb-8 max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-gradient animate-fade-in">
                 Al-Qur'an Explorer
               </h1>
               <p className="text-lg text-muted-foreground animate-fade-up" style={{ animationDelay: '100ms' }}>
                 Read, listen, and explore the Holy Qur'an with elegant translation and intuitive navigation.
               </p>
+            </div>
+
+            {/* Quran Illustration */}
+            <div className="max-w-xl mx-auto mb-12 px-4">
+              <div 
+                className={`relative overflow-hidden rounded-lg shadow-lg border border-gold-200 ${
+                  illustrationLoaded ? 'animate-fade-in' : 'opacity-0'
+                }`}
+                style={{ animationDelay: '200ms' }}
+              >
+                <img
+                  src="/quran-illustration.png"
+                  alt="Al-Qur'an Illustration"
+                  className="w-full h-auto object-cover"
+                  onLoad={handleIllustrationLoad}
+                  onError={() => setIllustrationLoaded(true)}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-quran-600/10 to-gold-500/10"></div>
+              </div>
             </div>
 
             <SearchBar onSearch={handleSearch} />
